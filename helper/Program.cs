@@ -4,7 +4,7 @@ using helper;
 using Newtonsoft.Json;
 
 string diretorio = "C:/provas/saida";
-string arquivoPy = "pdfReader/enem.py";
+string arquivoPy = "pdfReader/iftm.py";
 Directory.Delete(diretorio, true);
 Directory.CreateDirectory(diretorio);
 
@@ -22,13 +22,14 @@ if (File.Exists(fileOut)) File.Delete(fileOut);
 var files = Directory.GetFiles(diretorio);
 
 List<string> gabarito = Funcoes.CarregaGabarito();
+List<string> materias = Funcoes.CarregaMaterias();
 List<Questoes> questoes = new List<Questoes>();
 
-int codigoProva = 136;
+int codigoProva = 137;
 Console.WriteLine("Start processing files.");
 bool errors = false;
 
-List<int> questoesAnuladas = new List<int>() { 164 };
+List<int> questoesAnuladas = new List<int>() {  };
 
 foreach (var file in files)
 {
@@ -39,8 +40,6 @@ foreach (var file in files)
         QuestaoFromFile questao = JsonConvert.DeserializeObject<QuestaoFromFile>(text);
         if(questao != null && int.TryParse(questao.numeroquestao, out var numeroQuestao))
         {
-            if (numeroQuestao < 90) continue;
-
             if (questoesAnuladas.Contains(numeroQuestao))
                 continue;
 
@@ -50,7 +49,7 @@ foreach (var file in files)
             questoes1.CodigoProva = codigoProva;
             questoes1.ObservacaoQuestao = string.Empty;
             questoes1.NumeroQuestao = numeroQuestao;
-            questoes1.Materia = questao.materia;
+            questoes1.Materia = materias[numeroQuestao-1];
             questoes1.CampoQuestao = questao.questao;
             questoes1.RespostasQuestoes = new List<RespostasQuestoes>();
 
@@ -66,7 +65,7 @@ foreach (var file in files)
                     temp.TextoResposta = temp.TextoResposta.Substring(3);
                 }
 
-                switch (gabarito[questoes1.NumeroQuestao - 91]) 
+                switch (gabarito[questoes1.NumeroQuestao - 1]) 
                 {
                     case "A":
                         temp.Certa = i == 0 ? "1" : "2";
