@@ -4,7 +4,7 @@ using helper;
 using Newtonsoft.Json;
 
 string diretorio = "C:/provas/saida";
-string arquivoPy = "pdfReader/iftm.py";
+string arquivoPy = "pdfReader/ufu.py";
 Directory.Delete(diretorio, true);
 Directory.CreateDirectory(diretorio);
 
@@ -25,11 +25,12 @@ List<string> gabarito = Funcoes.CarregaGabarito();
 List<string> materias = Funcoes.CarregaMaterias();
 List<Questoes> questoes = new List<Questoes>();
 
-int codigoProva = 137;
+int codigoProva = 140;
 Console.WriteLine("Start processing files.");
 bool errors = false;
 
-List<int> questoesAnuladas = new List<int>() {  };
+List<int> questoesAnuladas = new List<int>() { };
+List<String> letras = new List<string>() { "A) ", "B) ", "C) ", "D) ", "E) " };
 
 foreach (var file in files)
 {
@@ -40,7 +41,7 @@ foreach (var file in files)
         QuestaoFromFile questao = JsonConvert.DeserializeObject<QuestaoFromFile>(text);
         if(questao != null && int.TryParse(questao.numeroquestao, out var numeroQuestao))
         {
-            if (questoesAnuladas.Contains(numeroQuestao))
+            if (questoesAnuladas.Contains(numeroQuestao) || numeroQuestao <= 40)
                 continue;
 
             Questoes questoes1 = new Questoes();
@@ -49,7 +50,7 @@ foreach (var file in files)
             questoes1.CodigoProva = codigoProva;
             questoes1.ObservacaoQuestao = string.Empty;
             questoes1.NumeroQuestao = numeroQuestao;
-            questoes1.Materia = materias[numeroQuestao-1];
+            questoes1.Materia = materias[numeroQuestao-1].ToUpper();
             questoes1.CampoQuestao = questao.questao;
             questoes1.RespostasQuestoes = new List<RespostasQuestoes>();
 
@@ -58,7 +59,7 @@ foreach (var file in files)
             {
                 var temp = new RespostasQuestoes();
                 temp.CodigoQuestao = 0;
-                temp.TextoResposta = item.Replace("\t", " ").Replace("\n", "");
+                temp.TextoResposta = (item.Contains(letras[i]) ? item : (letras[i] + item)).Replace("\t", " ").Replace("\n", "");
 
                 if(temp.TextoResposta.StartsWith("A A") || temp.TextoResposta.StartsWith("B B") || temp.TextoResposta.StartsWith("C C") || temp.TextoResposta.StartsWith("D D") || temp.TextoResposta.StartsWith("E E"))
                 {

@@ -3,6 +3,7 @@ import fitz
 import base64
 import os
 import json
+import funcoes
 
 def save_question_info(question_number, question_data, output_directory):
     # Create a directory if it doesn't exist
@@ -68,84 +69,8 @@ def extrair_informacoes(pdf_path):
                 texto_questao = texto_questao.replace("\t", " ")
                 texto_questao = texto_questao.replace("\n", " ")
                 texto_questao = "<b>Questão " + num_questao + "</b><br><br>" + texto_questao
+                texto_questao = funcoes.TrataReferencias(texto_questao=texto_questao)
 
-                if("Disponível em:" in texto_questao):
-                    indexAt = texto_questao.index("Disponível em:")
-                    found = False
-                    text = ''
-                    while(texto_questao[indexAt] != '<' and not found):
-                        if(texto_questao[indexAt] == '>' or found):
-                            found = True
-                            text+= texto_questao[indexAt]
-                        indexAt-=1
-                        if(indexAt == 0):
-                            break
-                    indexAt+=2
-                    indexEnd = texto_questao.index("Disponível em:")
-                    found = False
-                    text = ''
-                    while(texto_questao[indexEnd] != '>' and not found):
-                        if(texto_questao[indexEnd] == '<' or found):
-                            found = True
-                            text+= texto_questao[indexEnd]
-                        indexEnd+=1
-                        if(indexEnd == len(texto_questao)):
-                            break
-                    indexEnd-=1
-                    
-                    texto_questao = texto_questao[:indexAt] + '<sub>' + texto_questao[indexAt:indexEnd] + '</sub><br>' + texto_questao[indexEnd:]
-                
-                if("(adaptado)" in texto_questao):
-                    indexAt = texto_questao.index("(adaptado)")
-                    found = False
-                    text = ''
-                    while(texto_questao[indexAt] != '<' and not found):
-                        if(texto_questao[indexAt] == '>' or found):
-                            found = True
-                            text+= texto_questao[indexAt]
-                        indexAt-=1
-                        if(indexAt == 0):
-                            break
-                    indexAt+=2
-                    indexEnd = texto_questao.index("(adaptado)")
-                    found = False
-                    text = ''
-                    while(texto_questao[indexEnd] != '>' and not found):
-                        if(texto_questao[indexEnd] == '<' or found):
-                            found = True
-                            text+= texto_questao[indexEnd]
-                        indexEnd+=1
-                        if(indexEnd == len(texto_questao)):
-                            break
-                    indexEnd-=1
-                    
-                    texto_questao = texto_questao[:indexAt] + '<sub>' + texto_questao[indexAt:indexEnd] + '</sub><br>' + texto_questao[indexEnd:]
-                if("(fragmento)" in texto_questao):
-                    indexAt = texto_questao.index("(fragmento)")
-                    found = False
-                    text = ''
-                    while(texto_questao[indexAt] != '<' and not found):
-                        if(texto_questao[indexAt] == '>' or found):
-                            found = True
-                            text+= texto_questao[indexAt]
-                        indexAt-=1
-                        if(indexAt == 0):
-                            break
-                    indexAt+=2
-                    indexEnd = texto_questao.index("(fragmento)")
-                    found = False
-                    text = ''
-                    while(texto_questao[indexEnd] != '>' and not found):
-                        if(texto_questao[indexEnd] == '<' or found):
-                            found = True
-                            text+= texto_questao[indexEnd]
-                        indexEnd+=1
-                        if(indexEnd == len(texto_questao)):
-                            break
-                    indexEnd-=1
-                    
-                    texto_questao = texto_questao[:indexAt] + '<sub>' + texto_questao[indexAt:indexEnd] + '</sub><br>' + texto_questao[indexEnd:]
-                
                 texto_questao = texto_questao.replace("TEXTO I", "<b>TEXTO I</b><br><br>").replace("TEXTO II", "<b>TEXTO II</b><br><br>").replace("TEXTO III", "<b>TEXTO III</b><br><br>")
                 questao_objeto = {
                     "questao": texto_questao,
