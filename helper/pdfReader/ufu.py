@@ -6,18 +6,6 @@ import json
 import funcoes
 import re
 
-def save_question_info(question_number, question_data, output_directory):
-    # Create a directory if it doesn't exist
-    if not os.path.exists(output_directory):
-        os.makedirs(output_directory)
-
-    # Create a filename for the question
-    filename = os.path.join(output_directory, f"question_{question_number}.json")
-
-    # Save the question data to a JSON file
-    with open(filename, 'w', encoding='utf-8') as json_file:
-        json.dump(question_data, json_file, indent=2, ensure_ascii=False)
-
 def extrair_informacoes(pdf_path):
     # Abrir o arquivo PDF
     with open(pdf_path, 'rb') as file:
@@ -64,26 +52,9 @@ def extrair_informacoes(pdf_path):
 
                 respostas_texto = texto_questao[texto_questao.rfind('A) '):]
                 texto_questao = texto_questao[:texto_questao.rfind('A) ')]
-                texto_questao = texto_questao.replace(" .\n", ".<br>")
-                texto_questao = texto_questao.replace(".\n", ".<br>")
-                texto_questao = texto_questao.replace("(  )", "<br>(  ) ")
-                texto_questao = texto_questao.replace("\t", " ")
-                texto_questao = texto_questao.replace("\n", " ")
-                texto_questao = texto_questao.replace("<http", "http")
-                texto_questao = texto_questao.replace(".html>", ".html")
-                texto_questao = texto_questao.replace(".uk>", ".uk")
-                texto_questao = texto_questao.replace(".com>", ".com")
-                texto_questao = texto_questao.replace(".htm>", ".htm")
-                texto_questao = texto_questao.replace(".gov>", ".gov")
-                texto_questao = texto_questao.replace("< http", "http")
-                texto_questao = texto_questao.replace(".html >", ".html")
-                texto_questao = texto_questao.replace(".uk >", ".uk")
-                texto_questao = texto_questao.replace(".com >", ".com")
-                texto_questao = texto_questao.replace(".htm >", ".htm")
-                texto_questao = texto_questao.replace(".gov >", ".gov")
-                texto_questao = texto_questao.replace("   ", "<br><br>")
-                texto_questao = "<b>Questão " + num_questao + "</b><br><br>" + texto_questao
                 texto_questao = funcoes.TrataReferencias(texto_questao=texto_questao)
+                
+                texto_questao = "<b>Questão " + num_questao + "</b><br><br>" + texto_questao
                 
                 texto_questao = texto_questao.replace("TEXTO I", "<b>TEXTO I</b><br><br>").replace("TEXTO II", "<b>TEXTO II</b><br><br>").replace("TEXTO III", "<b>TEXTO III</b><br><br>")
                 questao_objeto = {
@@ -112,7 +83,7 @@ def extrair_informacoes(pdf_path):
                     questao_objeto["anexos"].append({"imagem": f"<imagem_{img_index + 1}>", "base64": base64_data})
 
                 # Imprimir o objeto
-                save_question_info(num_questao, questao_objeto, 'C:/provas/saida/')
+                funcoes.save_question_info(num_questao, questao_objeto, 'C:/provas/saida/')
 
         print("Finished")
 

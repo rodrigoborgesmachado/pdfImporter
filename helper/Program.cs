@@ -4,7 +4,7 @@ using helper;
 using Newtonsoft.Json;
 
 string diretorio = "C:/provas/saida";
-string arquivoPy = "pdfReader/ufu.py";
+string arquivoPy = "pdfReader/usp.py";
 Directory.Delete(diretorio, true);
 Directory.CreateDirectory(diretorio);
 
@@ -25,7 +25,7 @@ List<string> gabarito = Funcoes.CarregaGabarito();
 List<string> materias = Funcoes.CarregaMaterias();
 List<Questoes> questoes = new List<Questoes>();
 
-int codigoProva = 140;
+int codigoProva = 141;
 Console.WriteLine("Start processing files.");
 bool errors = false;
 
@@ -41,7 +41,7 @@ foreach (var file in files)
         QuestaoFromFile questao = JsonConvert.DeserializeObject<QuestaoFromFile>(text);
         if(questao != null && int.TryParse(questao.numeroquestao, out var numeroQuestao))
         {
-            if (questoesAnuladas.Contains(numeroQuestao) || numeroQuestao <= 40)
+            if (questoesAnuladas.Contains(numeroQuestao))
                 continue;
 
             Questoes questoes1 = new Questoes();

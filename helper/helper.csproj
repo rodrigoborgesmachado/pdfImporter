@@ -24,6 +24,9 @@
     <None Update="pdfReader\ufu.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="pdfReader\usp.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
