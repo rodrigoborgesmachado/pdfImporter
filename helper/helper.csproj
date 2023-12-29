@@ -12,6 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="pdfReader\concurso.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="pdfReader\enem.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
