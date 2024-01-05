@@ -47,7 +47,7 @@ def extrair_informacoes(pdf_path):
             num_questao = num_questao.strip()
 
             # Separar o número da questão e o texto
-            texto_questao = funcoes.TrataCaracteresEspeciais(texto_questao=texto_questao)
+            texto_questao = funcoes.trataCaractereres(texto_questao)
             respostas_texto = texto_questao[texto_questao.rfind('A) '):]
             texto_questao = texto_questao[:texto_questao.rfind('A) ')]
             texto_questao = funcoes.TrataReferencias(texto_questao=texto_questao)

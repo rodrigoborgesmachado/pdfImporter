@@ -43,7 +43,7 @@ def extrair_informacoes(pdf_path):
 
                 # Separar o número da questão e o texto
                 num_questao, texto_questao = questao_texto.split('\n', maxsplit=1)
-                texto_questao = funcoes.TrataCaracteresEspeciais(texto_questao=texto_questao)
+                texto_questao = funcoes.trataCaractereres(texto_questao)
 
                 num_questao = num_questao.replace(' ', '')
                 print("Processando questão " + num_questao)

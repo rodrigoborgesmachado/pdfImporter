@@ -1,58 +1,167 @@
 import os
 import json
 
-def TrataCaracteresEspeciais(texto_questao):
-    texto_questao = texto_questao.replace("𝑝", "<i>p</i>")
-    texto_questao = texto_questao.replace("𝑥", "<i>x</i>")
-    texto_questao = texto_questao.replace("𝑞", "<i>q</i>")
-    texto_questao = texto_questao.replace("𝑔", "<i>g</i>")
-    texto_questao = texto_questao.replace("𝑦", "<i>y</i>")
-    texto_questao = texto_questao.replace("", "<i>•</i>")
-    texto_questao = texto_questao.replace("∧", "&and;")
-    texto_questao = texto_questao.replace("∨", "&or;")
-    texto_questao = texto_questao.replace("𝑒", "e")
-    texto_questao = texto_questao.replace("→", "&#8594;")
-    texto_questao = texto_questao.replace("⇄", "&#8644;")
-    texto_questao = texto_questao.replace(" .\n", ".<br>")
-    texto_questao = texto_questao.replace(".\n", ".<br>")
-    texto_questao = texto_questao.replace("(  )", "<br>(  ) ")
-    texto_questao = texto_questao.replace("\t", " ")
-    texto_questao = texto_questao.replace("\n", " ")
-    texto_questao = texto_questao.replace("<http", "http")
-    texto_questao = texto_questao.replace(".html>", ".html")
-    texto_questao = texto_questao.replace(".uk>", ".uk")
-    texto_questao = texto_questao.replace(".com>", ".com")
-    texto_questao = texto_questao.replace(".htm>", ".htm")
-    texto_questao = texto_questao.replace(".gov>", ".gov")
-    texto_questao = texto_questao.replace("< http", "http")
-    texto_questao = texto_questao.replace(".html >", ".html")
-    texto_questao = texto_questao.replace(".uk >", ".uk")
-    texto_questao = texto_questao.replace(".com >", ".com")
-    texto_questao = texto_questao.replace(".htm >", ".htm")
-    texto_questao = texto_questao.replace(".gov >", ".gov")
-    texto_questao = texto_questao.replace("   ", "<br><br>")
-    texto_questao = texto_questao.replace("(A)", "A)")
-    texto_questao = texto_questao.replace("(B)", "B)")
-    texto_questao = texto_questao.replace("(C)", "C)")
-    texto_questao = texto_questao.replace("(D)", "D)")
-    texto_questao = texto_questao.replace("(E)", "E)")
-    texto_questao = texto_questao.replace("( A)", "A)")
-    texto_questao = texto_questao.replace("( B)", "B)")
-    texto_questao = texto_questao.replace("( C)", "C)")
-    texto_questao = texto_questao.replace("( D)", "D)")
-    texto_questao = texto_questao.replace("( E)", "E)")
-    texto_questao = texto_questao.replace("( A )", "A)")
-    texto_questao = texto_questao.replace("( B )", "B)")
-    texto_questao = texto_questao.replace("( C )", "C)")
-    texto_questao = texto_questao.replace("( D )", "D)")
-    texto_questao = texto_questao.replace("( E )", "E)")
-    texto_questao = texto_questao.replace("(A )", "A)")
-    texto_questao = texto_questao.replace("(B )", "B)")
-    texto_questao = texto_questao.replace("(C )", "C)")
-    texto_questao = texto_questao.replace("(D )", "D)")
-    texto_questao = texto_questao.replace("(E )", "E)")
+def replaceAll(str, list):
+    temp = str
+    for i, palavra in enumerate(list):
+        temp = temp.replace(palavra, "")
+    return temp
 
-    return texto_questao
+def getNumeroProva(numero, useTwo = False):
+    retorno = ''
+    if(numero < 10 and useTwo):
+        retorno = '0' + str(numero)
+    else:
+        retorno = str(numero)
+    return retorno
+
+def trataCaractereres(texto):
+    blackList = [
+	{"old":"√", "new":"&#8730;"},
+    {"old":"𝑝", "new":"<i>p</i>"},
+    {"old":"𝑥", "new":"<i>x</i>"},
+    {"old":"𝑞", "new":"<i>q</i>"},
+    {"old":"𝑔", "new":"<i>g</i>"},
+    {"old":"𝑦", "new":"<i>y</i>"},
+    {"old":"", "new":"<i>•</i>"},
+    {"old":"∧", "new":"&and;"},
+    {"old":"∨", "new":"&or;"},
+    {"old":"𝑒", "new":"e"},
+    {"old":"→", "new":"&#8594;"},
+    {"old":"⇄", "new":"&#8644;"},
+    {"old":" .\n", "new":".<br>"},
+    {"old":".\n", "new":".<br>"},
+    {"old":"(  )", "new":"<br>(  ) "},
+    {"old":"\t", "new":" "},
+    {"old":"\n", "new":" "},
+    {"old":"<http", "new":"http"},
+    {"old":".html>", "new":".html"},
+    {"old":".uk>", "new":".uk"},
+    {"old":".com>", "new":".com"},
+    {"old":".htm>", "new":".htm"},
+    {"old":".gov>", "new":".gov"},
+    {"old":"< http", "new":"http"},
+    {"old":".html >", "new":".html"},
+    {"old":".uk >", "new":".uk"},
+    {"old":".com >", "new":".com"},
+    {"old":".htm >", "new":".htm"},
+    {"old":".gov >", "new":".gov"},
+    {"old":"   ", "new":"<br><br>"},
+    {"old":"ζ", "new":"&#950;"},
+    {"old":"η", "new":"&#951;"},
+    {"old":"θ", "new":"&#952;"},
+    {"old":"ι", "new":"&#953;"},
+    {"old":"κ", "new":"&#954;"},
+    {"old":"λ", "new":"&#955;"},
+    {"old":"μ", "new":"&#956;"},
+    {"old":"ν", "new":"&#957;"},
+    {"old":"ξ", "new":"&#958;"},
+    {"old":"ο", "new":"&#959;"},
+    {"old":"π", "new":"&#960;"},
+    {"old":"σ", "new":"&#963;"},
+    {"old":"τ", "new":"&#964;"},
+    {"old":"υ", "new":"&#965;"},
+    {"old":"φ", "new":"&#966;"},
+    {"old":"χ", "new":"&#967;"},
+    {"old":"ψ", "new":"&#968;"},
+    {"old":"ω", "new":"&#969;"},
+    {"old":"ϑ", "new":"&#977;"},
+    {"old":"ϒ", "new":"&#978;"},
+    {"old":"ϖ", "new":"&#982;"},
+    {"old":"𝑛", "new":"<i>n</i>"},
+    {"old":"(A)", "new":"A)"},
+    {"old":"(B)", "new":"B)"},
+    {"old":"(C)", "new":"C)"},
+    {"old":"(D)", "new":"D)"},
+    {"old":"(E)", "new":"E)"},
+    {"old":"( A)", "new":"A)"},
+    {"old":"( B)", "new":"B)"},
+    {"old":"( C)", "new":"C)"},
+    {"old":"( D)", "new":"D)"},
+    {"old":"( E)", "new":"E)"},
+    {"old":"( A )", "new":"A)"},
+    {"old":"( B )", "new":"B)"},
+    {"old":"( C )", "new":"C)"},
+    {"old":"( D )", "new":"D)"},
+    {"old":"( E )", "new":"E)"},
+    {"old":"(A )", "new":"A)"},
+    {"old":"(B )", "new":"B)"},
+    {"old":"(C )", "new":"C)"},
+    {"old":"(D )", "new":"D)"},
+    {"old":"(E )", "new":"E)"},
+    {"old":"Quan to", "new":"Quanto"},
+    {"old": "\xa0", "new": ""},
+    {"old": "\nConcurso Público para oInstituto Estadual do Ambiente –INEA ‐RJ FGV ‐Projetos\n\nNível Superior –Advogado  Tipo 1–Cor Branca", "new": ""},
+    {"old": "pcimarkpci", "new": ""},
+    {"old": "MDAwMDowMDAwOjAwMDA6MDAwMDowMDAwOmZmZmY6YjM2ODo5ZGI2", "new": ""},
+    {"old": ":RnJpLCAyOSBEZWMgMjAyMyAxNzo0Mjo1NyAtMDMwMA", "new": ""},
+    {"old": "MjgwNDoxZTY4OmMyMTE6YWQxMjoyMGFkOjhiMzM6MDk4YTplZTAz:", "new": ""},
+    {"old": "RnJpLCAyOSBEZWMgMjAyMyAxNzo0MjozMiAtMDMwMA", "new": ""},
+    {"old": "==\nwww.pciconcursos.com.br", "new": ""},
+    {"old": "Concurso Público para o Instituto Estadual do Ambiente – INEA‐RJ", "new": ""},
+    {"old": "FGV ‐ Projetos", "new": ""},
+    {"old": "Tipo 1 – Cor Branca", "new": ""},
+    {"old": "\nSECRETARIA DE ESTADO DE FAZENDA DA BAHIA - SEFAZ -BA FGV \n", "new": ""},
+    {"old": "\nAgente de  Tributos Estaduais (Administração e Finanças)", "new": ""},
+    {"old": "\uf020", "new": ""},
+    {"old": "Tipo  Branca", "new": ""},
+    {"old": "Página 2", "new": ""},
+    {"old": "Página 3", "new": ""},
+    {"old": "Página 4", "new": ""},
+    {"old": "Página 5", "new": ""},
+    {"old": "Página 6", "new": ""},
+    {"old": "Página 7", "new": ""},
+    {"old": "Página 8", "new": ""},
+    {"old": "Página 9", "new": ""},
+    {"old": "Página 10", "new": ""},
+    {"old": "Página 11", "new": ""},
+    {"old": "Página 12", "new": ""},
+    {"old": "Página 13", "new": ""},
+    {"old": "Página 14", "new": ""},
+    {"old": "\n Conhecimentos Gerais", "new": ""},
+    {"old": "\nLíngua Portuguesa", "new": ""},
+    {"old": "\n Direito Constitucional", "new": ""},
+    {"old": "       –      ", "new": ""},
+    {"old": "–    ", "new": ""},
+    {"old": "–  ", "new": ""},
+    {"old": "Língua Portuguesa", "new": ""},
+    {"old": "Conhecimentos Gerais", "new": ""},
+    {"old": "Legislação Institucional", "new": ""},
+    {"old": "Direito Constitucional", "new": ""},
+    {"old": "Direito Civil e Processual Civil", "new": ""},
+    {"old": "Direito Ambiental", "new": ""},
+    {"old": "oArt.", "new": " o Art."},
+    	{"old": "oDecreto ", "new":"o Decreto "},
+    {"old": "aafirmativa ", "new": "a afirmativa"},
+    {"old": "eque ", "new": "e que"},
+    {"old": "aplicando ‐lhe", "new": "aplicando‐lhe"},
+    {"old": "oé", "new": "o é"},
+    {"old": "oseu", "new": "o seu"},
+    {"old": "odireito", "new": "o direito"},
+    {"old": "Amulta", "new": "A multa"},
+    {"old": "amulta", "new": "a multa"},
+    {"old": "aEmpresa", "new": "a Empresa"},
+    {"old": "Éoprincípio", "new": "É o princípio"},
+    {"old": "aseguir", "new": "A seguir"},
+    {"old": "eboa", "new": "e boa"},
+    {"old": "féobjetiva", "new": "fé objetiva"},
+    {"old": "aAdministração", "new": "a Administração"},
+    {"old": "oadministrado", "new": "o administrado"},
+    {"old": "évedado", "new": "é vedado"},
+    {"old": "OJuiz", "new": "O Juiz"},
+    {"old": "oJuiz", "new": "o Juiz"},
+    {"old": "oproprietário", "new": "o proprietário"},
+    {"old": "àexceção", "new": "à exceção"},
+    {"old": "aafirmativa", "new": "a afirmativa"},
+    {"old": "Aposse", "new": "A posse"},
+    {"old": "aposse", "new": "a posse"},
+	]
+
+    for i, palavra in enumerate(blackList):
+        palavraOld = palavra["old"]
+        palavraNew = palavra["new"]
+        texto = texto.replace(palavraOld, palavraNew)
+    return texto
 
 def TrataReferencias(texto_questao):
     listaPalavras = ["Disponível em", "disponível em", "(adaptado)", "(Adaptado)", "(Fragmento)", "(fragmento)", "Acesso em", "acesso em", "p.", "P."]
@@ -122,3 +231,6 @@ def save_gabarito_info(test, question_data, output_directory):
     # Save the question data to a JSON file
     with open(filename, 'w', encoding='utf-8') as json_file:
         json.dump(question_data, json_file, indent=2, ensure_ascii=False)
+
+def is_number(s):
+    return s.isdigit()
