@@ -25,14 +25,14 @@ List<string> gabarito = Funcoes.CarregaGabarito();
 List<string> materias = Funcoes.CarregaMaterias();
 List<Questoes> questoes = new List<Questoes>();
 
-int codigoProva = 145;
+int codigoProva = 146;
 Console.WriteLine("Start processing files.");
 bool errors = false;
 
-List<int> questoesAnuladas = new List<int>() { 9, 20, 41 };
+List<int> questoesAnuladas = new List<int>() {  };
 List<String> letras = new List<string>() { "A) ", "B) ", "C) ", "D) ", "E) " };
 
-string complemento = "";
+string complemento = "<b>Texto 1</b> <br>“A democracia reclama um jornalismo vigoroso e independente. A agenda pública é determinada pela imprensa tradicional. Não há um único assunto relevante que não tenha nascido numa pauta do jornalismo de qualidade. Alguns formadores de opinião utilizam as redes sociais para reverberar, multiplicar e cumprem assim relevante papel mobilizador. Mas o pontapé inicial é sempre das empresas de conteúdo independentes”. (O Estado de São Paulo, 10/04/2017)<br><br>";
 
 foreach (var file in files)
 {
@@ -43,8 +43,10 @@ foreach (var file in files)
         QuestaoFromFile questao = JsonConvert.DeserializeObject<QuestaoFromFile>(text);
         if(questao != null && int.TryParse(questao.numeroquestao, out var numeroQuestao))
         {
-            if (questoesAnuladas.Contains(numeroQuestao) || numeroQuestao == 26)
+            if (string.IsNullOrEmpty(questao.questao) || questoesAnuladas.Contains(numeroQuestao))
                 continue;
+
+            //questao.questao = await Chat.GetQuestaoCorrigida(questao.questao);
 
             Questoes questoes1 = new Questoes();
 
@@ -53,7 +55,7 @@ foreach (var file in files)
             questoes1.ObservacaoQuestao = string.Empty;
             questoes1.NumeroQuestao = numeroQuestao;
             questoes1.Materia = materias[numeroQuestao-1].ToUpper();
-            questoes1.CampoQuestao = numeroQuestao <= 10 ? complemento + questao.questao : questao.questao;
+            questoes1.CampoQuestao = numeroQuestao <= 3 ? complemento + questao.questao : questao.questao;
             questoes1.RespostasQuestoes = new List<RespostasQuestoes>();
 
             int i = 0;

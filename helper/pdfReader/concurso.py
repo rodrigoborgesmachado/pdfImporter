@@ -23,19 +23,16 @@ def extrair_informacoes(pdf_path):
             utf8_text = code.decode('utf-8')
             utf8_text = utf8_text.strip()
 
-            if(pageNumber == 3):
-                utf8_text = utf8_text[utf8_text.rfind("mesmos”."):]
-
             allText += utf8_text
         allText = funcoes.trataCaractereres(allText)
         allText = allText.replace('.  ', '.\n')
 
-        my_list = list(range(1, 71))
+        my_list = list(range(1, 51))
 
         for num_questao in my_list:
-            numeroquestao = funcoes.getNumeroProva(num_questao, True)
-            numeroquestaoNext = funcoes.getNumeroProva(num_questao+1, True)
-            indexStart = allText.find(numeroquestao + '  ')
+            numeroquestao = funcoes.getNumeroProva(num_questao, False)
+            numeroquestaoNext = funcoes.getNumeroProva(num_questao+1, False)
+            indexStart = allText.find(numeroquestao + '  ') + len(numeroquestao)
             indexEnd = allText.find(numeroquestaoNext + '  ')
 
             if(indexStart < 0):
@@ -77,5 +74,5 @@ def extrair_informacoes(pdf_path):
 
 if __name__ == "__main__":
     # Substitua 'caminho_para_seu_arquivo.pdf' pelo caminho do seu arquivo PDF
-    caminho_do_pdf = 'C:/provas/advogado_tipo_01.pdf'
+    caminho_do_pdf = 'C:/provas/ibge_agente_censitario_de_informatica_aci_ibge_aci_tipo_1.pdf'
     extrair_informacoes(caminho_do_pdf)

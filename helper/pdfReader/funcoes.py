@@ -164,7 +164,7 @@ def trataCaractereres(texto):
     return texto
 
 def TrataReferencias(texto_questao):
-    listaPalavras = ["Disponível em", "disponível em", "(adaptado)", "(Adaptado)", "(Fragmento)", "(fragmento)", "Acesso em", "acesso em", "p.", "P."]
+    listaPalavras = ["Disponível em", "disponível em", "(adaptado)", "(Adaptado)", "(Fragmento)", "(fragmento)", "Acesso em", "acesso em", "p.", "P.", "\uf04a Tipo 1 – Cor BRANCA", "rInstituto Brasileiro de Geografia e Estatística<br><br>FGV  Projetos<br><br>  Agente Censitário de Informática - ACI", "www.pciconcursos.com.brInstituto Brasileiro de Geografia e Estatística<br><br>FGV  Projetos<br><br>", "Instituto Brasileiro de Geografia e Estatística<br><br>FGV  Projetos<br><br>  Agente Censitário de Informática - ACI \uf04a Tipo 1 – Cor BRANCA  –"]
 
     for palavra in listaPalavras:
         if(palavra in texto_questao):
