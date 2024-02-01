@@ -2,6 +2,7 @@
 
 using helper;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 string diretorio = "C:/provas/saida";
 string arquivoPy = "pdfReader/concurso.py";
@@ -25,14 +26,17 @@ List<string> gabarito = Funcoes.CarregaGabarito();
 List<string> materias = Funcoes.CarregaMaterias();
 List<Questoes> questoes = new List<Questoes>();
 
-int codigoProva = 146;
+int codigoProva = 154;
 Console.WriteLine("Start processing files.");
 bool errors = false;
 
-List<int> questoesAnuladas = new List<int>() {  };
+List<int> questoesAnuladas = new List<int>() { 26, 50 };
 List<String> letras = new List<string>() { "A) ", "B) ", "C) ", "D) ", "E) " };
 
-string complemento = "<b>Texto 1</b> <br>“A democracia reclama um jornalismo vigoroso e independente. A agenda pública é determinada pela imprensa tradicional. Não há um único assunto relevante que não tenha nascido numa pauta do jornalismo de qualidade. Alguns formadores de opinião utilizam as redes sociais para reverberar, multiplicar e cumprem assim relevante papel mobilizador. Mas o pontapé inicial é sempre das empresas de conteúdo independentes”. (O Estado de São Paulo, 10/04/2017)<br><br>";
+string complemento = "";
+
+var stopWatch = new Stopwatch();
+stopWatch.Start();
 
 foreach (var file in files)
 {
@@ -46,7 +50,7 @@ foreach (var file in files)
             if (string.IsNullOrEmpty(questao.questao) || questoesAnuladas.Contains(numeroQuestao))
                 continue;
 
-            //questao.questao = await Chat.GetQuestaoCorrigida(questao.questao);
+            questao.questao = await ChatGPT.GetQuestaoCorrigida(questao.questao);
 
             Questoes questoes1 = new Questoes();
 
@@ -55,7 +59,8 @@ foreach (var file in files)
             questoes1.ObservacaoQuestao = string.Empty;
             questoes1.NumeroQuestao = numeroQuestao;
             questoes1.Materia = materias[numeroQuestao-1].ToUpper();
-            questoes1.CampoQuestao = numeroQuestao <= 3 ? complemento + questao.questao : questao.questao;
+            //questoes1.CampoQuestao = numeroQuestao <= 5 ? complemento + questao.questao : questao.questao;
+            questoes1.CampoQuestao = questao.questao;
             questoes1.RespostasQuestoes = new List<RespostasQuestoes>();
 
             int i = 0;
@@ -105,4 +110,9 @@ foreach (var file in files)
 var texto = JsonConvert.SerializeObject(questoes);
 
 File.WriteAllText(fileOut, texto.ToString());
+
+stopWatch.Stop();
+
+string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}:{3:00}", stopWatch.Elapsed.Hours, stopWatch.Elapsed.Minutes, stopWatch.Elapsed.Seconds, stopWatch.Elapsed.Minutes / 10);
+Console.WriteLine($"Time: {elapsedTime}");
 Console.WriteLine($"Finished. {(errors ? "There were erorrs." : "No errors.")}");

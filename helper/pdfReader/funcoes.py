@@ -46,7 +46,6 @@ def trataCaractereres(texto):
     {"old":".com >", "new":".com"},
     {"old":".htm >", "new":".htm"},
     {"old":".gov >", "new":".gov"},
-    {"old":"   ", "new":"<br><br>"},
     {"old":"ζ", "new":"&#950;"},
     {"old":"η", "new":"&#951;"},
     {"old":"θ", "new":"&#952;"},
@@ -131,7 +130,7 @@ def trataCaractereres(texto):
     {"old": "Direito Civil e Processual Civil", "new": ""},
     {"old": "Direito Ambiental", "new": ""},
     {"old": "oArt.", "new": " o Art."},
-    	{"old": "oDecreto ", "new":"o Decreto "},
+    {"old": "oDecreto ", "new":"o Decreto "},
     {"old": "aafirmativa ", "new": "a afirmativa"},
     {"old": "eque ", "new": "e que"},
     {"old": "aplicando ‐lhe", "new": "aplicando‐lhe"},
@@ -164,7 +163,7 @@ def trataCaractereres(texto):
     return texto
 
 def TrataReferencias(texto_questao):
-    listaPalavras = ["Disponível em", "disponível em", "(adaptado)", "(Adaptado)", "(Fragmento)", "(fragmento)", "Acesso em", "acesso em", "p.", "P.", "\uf04a Tipo 1 – Cor BRANCA", "rInstituto Brasileiro de Geografia e Estatística<br><br>FGV  Projetos<br><br>  Agente Censitário de Informática - ACI", "www.pciconcursos.com.brInstituto Brasileiro de Geografia e Estatística<br><br>FGV  Projetos<br><br>", "Instituto Brasileiro de Geografia e Estatística<br><br>FGV  Projetos<br><br>  Agente Censitário de Informática - ACI \uf04a Tipo 1 – Cor BRANCA  –"]
+    listaPalavras = ["Disponível em", "disponível em", "(adaptado)", "(Adaptado)", "(Fragmento)", "(fragmento)", "Acesso em", "acesso em", "p.", "P.", "\uf04a Tipo 1 – Cor BRANCA", "rInstituto Brasileiro de Geografia e Estatística<br><br>FGV  Projetos<br><br>  Agente Censitário de Informática - ACI", "www.pciconcursos.com.brInstituto Brasileiro de Geografia e Estatística<br><br>FGV  Projetos<br><br>", "Instituto Brasileiro de Geografia e Estatística<br><br>FGV  Projetos<br><br>  Agente Censitário de Informática - ACI \uf04a Tipo 1 – Cor BRANCA  –", "www.pciconcursos.com.brPrefeitura do Município de Cuiabá - Secretaria Municipal de Saúde<br><br>FGV – Projetos<br><br>  Agente de Saúde - Técnico de Laboratório<br><br>Tipo 1 – Cor BRANCA", "Legislação Específica", "www.pciconcursos.com.brPrefeitura do Município de Cuiabá - Secretaria Municipal de Saúde<br><br>FGV – Projetos<br><br>  Agente de Saúde - Técnico de Laboratório<br><br>Tipo 1 – Cor BRANCA", "www.pciconcursos.com.br RnJpLCAyOSBEZWMgMjAyMyAxNzo0NDowOCAtMDMwMA== www.pciconcursos.com.br Instituto Brasileiro de Geografia e Estatística<br><br>FGV  Projetos<br><br>  Analista - Análise de Sistemas - Desenvolvimento de Aplicações - WEB Mobile   Tipo 1 – Cor BRANCA  – ", "Conhecimentos Específicos", "RnJpLCAyOSBEZWMgMjAyMyAxNzo0NDo0NyAtMDMwMA== www.pciconcursos.com.br Concurso Público FUNSAUDE-E02 2021  FGV Conhecimento<br><br> E2NS07 Analista de  Tecnologia da Informação  Ε1Τ1 Tipo 1 – Cor BRANCA  – <br><br>", "<br><br><br><br>Atualidades", "RnJpLCAyOSBEZWMgMjAyMyAxNzo0NDo0NyAtMDMwMA== www.pciconcursos.com.br Concurso Público FUNSAUDE-E02 2021  FGV Conhecimento<br><br> E2NS07 Analista de  Tecnologia da Informação  Ε1Τ1 Tipo 1 – Cor BRANCA  – <br><br>Legislação", "RnJpLCAyOSBEZWMgMjAyMyAxNzo0NDo0NyAtMDMwMA== www.pciconcursos.com.br Concurso Público FUNSAUDE-E02 2021  FGV Conhecimento<br><br> E2NS07 Analista de  Tecnologia da Informação  Ε1Τ1 Tipo 1 – Cor BRANCA  – <br><br> Conhecimento Específico", "<br><br>Atenção: nas próximas cinco questões, considere a d efinição e  as instâncias das tabelas de bancos de dados CLUBE e JOGO  exibidas a seguir.<br><br> nome<br><br>Barcelona  Boca Juniors  The Strongest<br><br> JOGO<br><br><br><br>mandante visitante golsM golsV  Barcelona Boca Juniors 1 0  Barcelona The Strongest NULL NULL  Boca Juniors Barcelona 0 0  Boca Juniors The Strongest 3 0  The Strongest Barcelona 2 0  The Strongest Boca Juniors 2 0<br><br> Cada clube deve jogar quatro vezes, duas como manda nte e duas  como visitante.<br><br>As colunas golsM  e golsV  registram o número de gols dos times  mandantes e visitantes, respectivamente, em cada jo go. Ambas  são nulas enquanto o jogo não for realizado.<br><br>", "RnJpLCAyOSBEZWMgMjAyMyAxNzo0NDo0NyAtMDMwMA== www.pciconcursos.com.br Concurso Público FUNSAUDE-E02 2021  FGV Conhecimento</sub><br><br><br> E2NS07 Analista de  Tecnologia da Informação  Ε1Τ1 Tipo 1 – Cor BRANCA  – <br><br>"]
 
     for palavra in listaPalavras:
         if(palavra in texto_questao):
@@ -231,6 +230,18 @@ def save_gabarito_info(test, question_data, output_directory):
     # Save the question data to a JSON file
     with open(filename, 'w', encoding='utf-8') as json_file:
         json.dump(question_data, json_file, indent=2, ensure_ascii=False)
+
+def save_file(output_directory, fileName, data):
+    # Create a directory if it doesn't exist
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+
+    # Create a filename for the question
+    fileName = os.path.join(output_directory, fileName)
+
+    # Save the question data to a JSON file
+    with open(fileName, 'w', encoding='utf-8') as json_file:
+        json.dump(data, json_file, indent=2, ensure_ascii=False)
 
 def is_number(s):
     return s.isdigit()

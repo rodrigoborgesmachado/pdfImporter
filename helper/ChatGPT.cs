@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace helper
 {
-    public static class Chat
+    public static class ChatGPT
     {
         public async static Task<string> GetQuestaoCorrigida(string texto)
         {
-            string retorno = string.Empty;
+            string retorno = texto;
 
             try
             {
@@ -21,7 +21,7 @@ namespace helper
                 {
                     using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.openai.com/v1/chat/completions"))
                     {
-                        request.Headers.TryAddWithoutValidation("Authorization", "Bearer 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");
+                        request.Headers.TryAddWithoutValidation("Authorization", "Bearer {key}");
 
 
                         request.Content = new StringContent(CreateObject(texto));   
